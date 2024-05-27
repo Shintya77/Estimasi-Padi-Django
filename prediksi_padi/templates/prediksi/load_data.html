@@ -1,0 +1,200 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="height: 520px;">
+  <div class="container">
+     <!-- {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul> 
+    {% endif %} -->
+    {% if messages %}
+        <div class="alert alert-warning" role="alert">
+          {% for message in messages %}
+            <h4 class="alert-heading">{{ message }}</h4>
+            <hr>
+            <p>Periksa Kolom dan Isi Data! Sesuaikan dengan Contoh</p>
+          {% endfor %}
+        </div>
+    {% endif %}
+    <h5 class="up mb-1">Upload Data Padi</h5>
+    <h6 class="up-1 mb-1">Sistem melakukan prediksi hasil padi pada tingkat <strong>Provinsi</strong> dan dalam rentang waktu </h6> 
+    <!-- <div class="row">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <h6 class="display-7">Pastikan data anda terdiri dari variabel-variabel seperti ini :</h6>
+      </div>
+      <div class="col-md-6 text-right">
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ data_form }}
+          <button type="submit" class="btn btn-warning">Upload Data</button>
+        </form>
+       
+        <p class="lead-1">
+          <a class="btn btn-warning" href="{% url 'prediksi_padi:hasil' %}">Upload Data</a>
+        </p>
+      </div>
+    </div> -->
+    <h6 class="display-7">Pastikan data anda terdiri dari variabel-variabel seperti ini :</h6>
+    <!-- <form method="post">
+      <div class="form-row align-items-center">
+        <div class="col-md-6 mb-3">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" accept="csv">
+            <label class="custom-file-label" for="customFile">Choose file</label>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <button type="submit" class="btn btn-success">Upload</button>
+        </div>
+      </div>
+    </form> -->
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-row align-items-center">
+        <div class="col-md-6 mb-3">
+          <div class="custom-file">
+            {{ data_form.data_csv}}
+            <label class="custom-file-label" for="{{ data_form.data.id_for_label }}">Pilih Data</label>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <button type="submit" class="btn btn-success">Upload</button>
+        </div>
+      </div>
+    </form>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered table-active table-sm mb-1">
+        <thead>
+          <tr>
+            <th scope="col">provinsi</th>
+            <th scope="col">kode_provinsi</th>
+            <th scope="col">bulan_tahun</th>
+            <th scope="col">tahun</th>
+            <th scope="col">luas_Panen </th>
+            <th scope="col">produktivitas</th>
+            <th scope="col">curah_hujan</th>
+            <th scope="col">hari_hujan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Aceh</td>
+            <td>11</td>
+            <td>Januari</td>
+            <td>2018-01-01</td>
+            <td>125470.00</td>
+            <td>45.57</td>
+            <td>290</td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <td>Aceh</td>
+            <td>11</td>
+            <td>Februari</td>
+            <td>2018-02-01</td>
+            <td>125470.00</td>
+            <td>45.57</td>
+            <td>290</td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <td>Aceh</td>
+            <td>11</td>
+            <td>Maret</td>
+            <td>2018-03-01</td>
+            <td>125470.00</td>
+            <td>45.57</td>
+            <td>290</td>
+            <td>25</td>
+          </tr>
+        </tbody>
+      </table>
+    </div> 
+
+    <!-- {% if hasil_data %}
+    <h6 class="display-7">Data yang telah diunggah :</h6>
+    <div class="table-responsive">
+      <table class="table table-bordered table-active table-sm mb-3">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Provinsi</th>
+            <th scope="col">Kode Provinsi</th>
+            <th scope="col">Bulan</th>
+            <th scope="col">Tahun</th>
+            <th scope="col">Luas Panen </th>
+            <th scope="col">Produktivitas</th>
+            <th scope="col">Curah Hujan</th>
+            <th scope="col">Hari Hujan</th>
+          </tr>
+        </thead>
+        <tbody>   
+          {% for isi_data in hasil_data %}
+          <tr>
+            <td>{{ forloop.counter}}</td>
+            <td>{{ isi_data.provinsi }}</td>
+            <td>{{ isi_data.kode_provinsi }}</td>
+            <td>{{ isi_data.bulan_tahun }}</td>
+            <td>{{ isi_data.luas_panen }}</td>
+            <td>{{ isi_data.produktivitas }}</td>
+            <td>{{ isi_data.produksi }}</td>
+            <td>{{ isi_data.curah_hujan }}</td>
+            <td>{{ isi_data.hari_hujan }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>    
+
+      <nav aria-label="...">
+        {% if pisah.has_other_pages %}
+          <ul class="pagination">
+            {% if pisah.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ pisah.previous_page_number }}">Previous</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+   
+            {% for i in pisah.paginator.page_range %}
+              {% if pisah.number == i %}
+              <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ i }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+   
+            {% if pisah.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ pisah.next_page_number }}">Next</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+          </ul>
+        {% endif %}
+      </nav> 
+    </div> 
+    <p class="lead">
+      <a class="btn btn-info" href="{% url 'prediksi_padi:hasil' %}">Prediksi</a>
+    </p>
+    {% else %}
+    <h6 class="display-7 mt-3">Data belum diunggah atau terjadi kesalahan</h6>
+    {% endif %} -->
+  
+    
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+  document.getElementById("id_data_csv").addEventListener("change", function() {
+    var fileName = this.value.split("\\").pop();
+    var label = document.querySelector(".custom-file-label");
+    label.textContent = fileName;
+  });
+</script>
+{% endblock script %}
+  
+    

@@ -1,0 +1,285 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="height: auto;">
+  <div class="container">
+    <div class="row mt-md-3 justify-content-center">
+      <div class="col-md-7">
+        <div class="card mb-0">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-12 col-md-6 mb-2 mb-md-0">
+                <div class="dropdown">
+                  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Semua Provinsi
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
+                      {% for provinsi in nama_prov  %}
+                        <a class="dropdown-item" href="{% url 'prediksi_padi:hasil_pred_filter' provinsi %}" onclick="updateChart('{{ provinsi }}')">{{ provinsi }}</a>
+                      {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                Prediksi Hasil Padi 
+                <strong>
+                  {% if prov %}
+                    {{ prov }}
+                  {% endif %}
+                </strong>
+              </div>
+            </div>
+          </div>
+          <div class="card-body text-secondary">
+            <canvas id="myChart"></canvas>
+            <p class="card-text"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 mt-3 mt-md-0">
+        <div class="row text-center">
+          <div class="col-12 col-md-6 mb-1">
+            <div class="card mb-1">
+              <div class="card-header text-white" style="background-color: #c1121f"> Nilai MAPE</div>
+              <div class="card-body">
+                <h2 class="card-title">{{ nilai_mape | floatformat:2 }} %</h2>
+              <p class="card-text">Tingkat Kesalahan Prediksi</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 mb-1">
+            <div class="card mb-1">
+              <div class="card-header bg-success text-white">Nilai Akurasi</div>
+              <div class="card-body">
+                <h2 class="card-title"> {{ nilai_akurasi | floatformat:2 }} %</h2>
+                <p class="card-text">Tingkat Nilai Akurasi Prediksi</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-12 mb-1">
+            <div class="card mb-3">
+              <div class="card-body">
+                <!-- <p>Kriteria Nilai MAPE</p> -->
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">Skala MAPE</th>
+                      <th scope="col"></th>
+                      <th scope="col">Kriteria</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td> &lt; 10%</td>
+                      <td></td>
+                      <td>Sangat Baik</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>10% - 20%</td>
+                      <td></td>
+                      <td>Baik</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td colspan="2">20% - 50%</td>
+                      <td>Cukup</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">4</th>
+                      <td colspan="2"> &gt; 50%</td>
+                      <td>Buruk</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-12">
+        <p class="format">*format file .csv</p>
+        <a class="btn btn-warning float-md-left" href="{% url 'prediksi_padi:export_csv_pred' %}">Download</a>
+        <div class="table-responsive">
+          <table class="table table-active table-bordered table-sm">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Provinsi</th>
+                <th scope="col">Kode Provinsi</th>
+                <th scope="col">Bulan Tahun</th>
+                <th scope="col">Luas Panen </th>
+                <th scope="col">Produktivitas</th>
+                <th scope="col">Curah Hujan</th>
+                <th scope="col">Hari Hujan</th>
+                <th scope="col" class="col-pred">Prediksi</th>
+              </tr>
+
+              <!-- <tr>
+                
+                {% for column in data_hasil.columns %}
+                  <th>{{ column }}</th>
+                {% endfor %}
+                  
+              </tr> -->
+
+            </thead>
+            <tbody>
+<!-- 
+              {% for index, row in data_hasil.iterrows  %}
+                <tr>
+                  {% for value in row %}
+                    <td>{{value}}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %} -->
+
+              
+              <!-- {% for index, row in data_hasil.iterrows %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  
+                  {% for column, value in row.iteritems %}
+                    
+                    {% if column != 'id' %}
+
+                      {% if column == 'prediksi_produksi' %}
+                        <td class="col-hsl"> {{value}} </td>
+                      {% else %}
+                        <td>{{value}}</td>
+                      {% endif %}
+
+                    {% endif %}
+                    
+                  {% endfor %}
+                    
+                </tr>
+              {% endfor %} -->
+
+              {% for isi_data in data_hasil %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ isi_data.provinsi }}</td>
+                <td>{{ isi_data.kode_provinsi }}</td>
+                <td>{{ isi_data.bulan_tahun | date:"F Y" }}</td>
+                <td>{{ isi_data.luas_panen }}</td>
+                <td>{{ isi_data.produktivitas }}</td>
+                <td>{{ isi_data.curah_hujan }}</td>
+                <td>{{ isi_data.hari_hujan }}</td>
+                <td class="col-hsl">{{ isi_data.produksi|floatformat:"2" }}</td>
+              </tr>
+              {% endfor %}
+                
+            </tbody>
+          </table>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block script%}
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    // data: {
+    //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'Juli', 'Agustus', 'September', 'Oktober','November','Desember'],
+    //     datasets: [{
+    //         label: 'My First Dataset',
+    //         data: {{ data_produksi }},
+    //         fill: false,
+    //         borderColor: '#28a745',
+    //         tension: 0.1
+    //     }]
+    // },
+    
+
+    data: {
+      labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+      datasets: [{
+        label: 'Produksi',
+        data: {{ data_prediksi}},
+        fill: false,
+        borderColor: '#28a745',
+        tension: 0.1
+      },
+    ]
+    },
+
+    options: {
+        maintainAspectRatio: false, // Menonaktifkan pengaturan otomatis rasio aspek
+        aspectRatio: 0.9, // Mengatur rasio aspek sesuai kebutuhan 
+        scales: {
+            y: {
+                suggestedMin: 10,
+                suggestedMax: 20
+            }
+        }
+    }
+});
+
+</script>
+
+<!-- <script>
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart;
+
+  function updateChart(selectProvinsi) {
+    var dataProduksi = fetchData(selectProvinsi, 'produksi');
+    var dataPrediksi = fetchData(selectProvinsi, 'prediksi_produksi');
+
+    myChart.data.datasets[0].data = dataPrediksi;
+    myChart.data.datasets[1].data = dataPrediksi;
+    myChart.update()
+  }
+  
+  function fetchData(selectProvinsi, field){
+  
+  }
+
+  myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+      datasets: [{
+        label: 'Produksi',
+        data: [],
+        fill: false,
+        borderColor: '#28a745',
+        tension: 0.1
+      },
+      {
+        label: 'Prediksi',
+        data: [],
+        fill: false,
+        borderColor: '#007bff',
+        tension: 0.1
+      }
+    ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      aspectRatio: 1.5,
+      scales: {
+        y: {
+          suggestedMin: 35,
+          suggestedMax: 80
+        }
+      }
+    }
+  });
+  
+  updateChart('Semua Provinsi')
+</script> -->
+
+{% endblock script%}

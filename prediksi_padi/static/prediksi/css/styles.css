@@ -1,0 +1,46 @@
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} 
+.col-pred{
+    background-color: #28a745;
+    color: white;
+}
+.col-hsl{
+    background-color: #ecf39e;
+    
+}
+.format{
+    text-align: right;
+    margin-top: -10px;
+}
+.jumbotron-fluid{
+    margin-top: -60px;
+}
+.lead-1{
+    font-size: 1.25rem;
+    font-weight: 300;
+    text-align: right;
+   
+}
+.up{
+    margin-top: 20px;
+    font-weight: bold;
+}
+.up-1{
+    margin-top: 20px;
+    font-weight: normal;
+}
+.up-1::after{
+    content: "Bulan";
+    font-weight: bold;
+}
+.up-1 strong{
+    font-weight: bold;
+}
+.table {
+    margin-top: 10px;
+}
+.table-responsive{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

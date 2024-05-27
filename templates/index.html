@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+{% load static%}
+{% block content %}
+<!-- <div class="jumbotron jumbotron-fluid">
+  <div class="container text-white">
+    <div class="overlay">
+      <img src="{% static 'img/bg3.png' %}" alt="">
+      <h2 class="display-5">Selamat datang di Sistem Estimasi Padi yang Penuh Angka!</h2>
+      <p> Mari kita jelajahi bersama dan unggah file CSV untuk melihat hasil prediksi!</p>
+      <hr class="my-lg-4">
+      <p>Ayo, berkontribusi dalam prediksi hasil padi dengan mengunggah file Anda sekarang!</p>
+      <p>*Unggah file dalam bentuk ".csv"</p>
+      <p class="lead">
+        <a class="btn btn-warning" href="prediksi/load_data" role="button"> Uplad File</a>
+      </p>
+    </div>
+  </div>
+</div> -->
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container text-dark">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="display-5">Selamat datang di sistem estimasi padi</h2>
+        <p>Mari jelajahi bersama dan unggah file CSV untuk melihat hasil prediksi!</p>
+        <hr class="my-4">
+        <p>Ayo, prediksi hasil padi dengan mengunggah file Anda sekarang!</p>
+        <p class="lead">
+          <a class="btn btn-warning" href="{% url 'prediksi_padi:load_data' %}" role="button">Upload File</a>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <img id="img_ind" src="{% static 'img/bg3.png' %}" alt="" class="img-fluid"> 
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

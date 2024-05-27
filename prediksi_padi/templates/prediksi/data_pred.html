@@ -1,0 +1,80 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="height: auto;">
+  <div class="container">
+    <h5 class="up mb-1">Data Padi Berhasil di Upload </h5>
+    <div class="row">
+      <div class="col-md-8">
+        <h6 class="up-1 mb-1">Sistem melakukan prediksi hasil padi pada tingkat <strong>Provinsi</strong> dan dalam rentang waktu </h6> 
+        <h6 class="display-7">Data yang telah diunggah :</h6>
+      </div>
+      <div class="col-md-4">
+        <p class="lead float-right">
+          <a class="btn btn-info" href="{% url 'prediksi_padi:hasil_pred' %}">Prediksi</a>
+        </p>
+      </div>
+    </div>
+    <div class="table-responsive" style="height: auto;">
+      <table class="table table-bordered table-active table-sm mb-3">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Provinsi</th>
+            <th scope="col">Kode Provinsi</th>
+            <th scope="col">Bulan Tahun</th>
+            <th scope="col">Luas Panen </th>
+            <th scope="col">Produktivitas</th>
+            <th scope="col">Curah Hujan</th>
+            <th scope="col">Hari Hujan</th>
+            <th scope="col">Produksi</th>
+          </tr>
+        </thead>
+        <tbody> 
+          {% for isi_data in pagination %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ isi_data.provinsi }}</td>
+            <td>{{ isi_data.kode_provinsi }}</td>
+            <td>{{ isi_data.bulan_tahun | date:"F Y"}}</td>
+            <td>{{ isi_data.luas_panen }}</td>
+            <td>{{ isi_data.produktivitas }}</td>
+            <td>{{ isi_data.curah_hujan }}</td>
+            <td>{{ isi_data.hari_hujan }}</td>
+            <td>{{ isi_data.produksi }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>    
+      <nav aria-label="...">
+        {% if pagination.has_other_pages %}
+          <ul class="pagination">
+            {% if pagination.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ pagination.previous_page_number }}">Previous</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+   
+            {% for i in pagination.paginator.page_range %}
+              {% if pagination.number == i %}
+              <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ i }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+   
+            {% if pagination.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ pagination.next_page_number }}">Next</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+          </ul>
+        {% endif %}
+        </nav>
+    </div> 
+  </div>
+</div>
+{% endblock content %}
+
+  
+    

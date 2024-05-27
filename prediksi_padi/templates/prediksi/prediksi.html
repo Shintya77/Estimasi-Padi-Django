@@ -1,0 +1,204 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="height: auto;">
+  <div class="container">
+    <h5 class="up mb-1">Prediksi Hasil Panen Padi</h5>
+    <h6 class="up-1 mb-1">Sistem melakukan prediksi hasil padi pada tingkat <strong>Provinsi</strong> dan dalam rentang waktu </h6> 
+    <h6 class="display-7">Variabel yang digunakan untuk Prediksi adalah seperti ini:</h6>
+    
+    <div class="row">
+      <div class="col-12 col-md-5">
+        <div class="table-responsive">
+          <table class="table table-bordered table-active table-sm mb-1">
+            <thead>
+              <tr>
+                <th scope="col">provinsi</th>
+                <th scope="col">kode_provinsi</th>
+                <th scope="col">bulan_tahun</th>
+                <th scope="col">tahun</th>
+                <th scope="col">luas_Panen </th>
+                <th scope="col">produktivitas</th>
+                <th scope="col">curah_hujan</th>
+                <th scope="col">hari_hujan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Aceh</td>
+                <td>11</td>
+                <td>Januari</td>
+                <td>2018-01-01</td>
+                <td>125470.00</td>
+                <td>45.57</td>
+                <td>290</td>
+                <td>25</td>
+              </tr>
+              <tr>
+                <td>Aceh</td>
+                <td>11</td>
+                <td>Februari</td>
+                <td>2018-02-01</td>
+                <td>125470.00</td>
+                <td>45.57</td>
+                <td>290</td>
+                <td>25</td>
+              </tr>
+              <tr>
+                <td>Aceh</td>
+                <td>11</td>
+                <td>Maret</td>
+                <td>2018-03-01</td>
+                <td>125470.00</td>
+                <td>45.57</td>
+                <td>290</td>
+                <td>25</td>
+              </tr>
+            </tbody>
+          </table>
+        </div> 
+      </div>
+      <div class="col-12 col-md-7">
+        <!-- <form method="post">
+          {% csrf_token %}
+          <table>
+            {{pred_form.as_table}}
+          </table>
+          <button type="submit" class="btn btn-warning">Prediksi</button>
+        </form> -->
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <div class="row">
+             <div class="col">
+               {{ pred_form.provinsi.label_tag }}
+               <select class="custom-select mr-sm-2" id="id_provinsi" name="provinsi">
+                  <option selected>Provinsi</option>
+                  {% for prov in provinsi  %}
+                    <option value="{{prov.0}}">{{prov.0}}</option>
+                  {% endfor %}
+                </select>
+             </div>
+             <div class="col">
+               {{ pred_form.kode_provinsi.label_tag }}
+               <select class="custom-select mr-sm-2" id="id_kode_provinsi" name="kode_provinsi">
+                <option selected>Kode Provinsi</option>
+                {% for kode in provinsi  %}
+                  <option value="{{kode.1}}">{{kode.1}}</option>
+                {% endfor %}
+              </select>
+             </div>
+            </div>
+           <div class="row">
+             <div class="col">
+               {{ pred_form.bulan_tahun.label_tag }}
+               {{ pred_form.bulan_tahun}}
+             </div>
+             <div class="col">
+               {{ pred_form.luas_panen.label_tag }}
+               {{ pred_form.luas_panen }}
+             </div>
+           </div>
+           <div class="row">
+             <div class="col">
+               {{ pred_form.produktivitas.label_tag }}
+               {{ pred_form.produktivitas }}
+             </div>
+             <div class="col">
+               {{ pred_form.curah_hujan.label_tag }}
+               {{ pred_form.curah_hujan }}
+             </div>
+           </div>
+           <div class="row">
+             <div class="col">
+               {{ pred_form.hari_hujan.label_tag }}
+               {{ pred_form.hari_hujan }}
+             </div>
+             <div class="col">
+              
+             </div>
+           </div>
+           <button type="submit" class="btn btn-warning mt-2">Prediksi</button>
+         </div>
+        </form>
+       
+        <!-- <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            {% for input in pred_form %}
+            {% if forloop.counter0|divisibleby:2 %}
+              <div class="form-row">
+            {% endif %}
+            <div class="col">
+              {{ input.label_tag }}
+              {{ input }}
+            </div>
+            {% if forloop.counter|divisibleby:2 or forloop.last %}
+              </div>
+            {% endif %}
+          {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-warning mt-2">Prediksi</button>
+        </form> -->
+        <div class="form-group row mr-2">
+          <label for="inputProduksi" class="col-sm-2 col-form-label">Produksi</label>
+          <div class="col-sm-6">
+              <input type="text" class="form-control" id="inputProduksi" placeholder="Prediksi Produksi" value="{{ hasil_pred }}">
+          </div>
+      </div>
+    </div>
+
+    
+
+    
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+
+<!-- <script>
+  document.getElementById('provinsiSelect').addEventListener('change', function() {
+    var selectedValue = this.value;
+    var secondTextField = document.getElementById('kodeProvinsiSelect');
+    
+    // Lakukan operasi untuk mengisi nilai text field kedua berdasarkan nilai yang dipilih dari dropdown
+    // Misalnya, jika data tuple adalah array of arrays, Anda dapat mencocokkan nilai pertama dengan nilai yang dipilih dari dropdown
+    // dan mengambil nilai kedua untuk diisi ke text field kedua
+    // Contoh:
+    var tupleData = [[1, 'Nilai 1'], [2, 'Nilai 2'], [3, 'Nilai 3']];
+    var selectedTuple = tupleData.find(tuple => tuple[0] == selectedValue);
+    
+    if (selectedTuple) {
+        secondTextField.value = selectedTuple[1];
+    } else {
+        secondTextField.value = '';
+    }
+});
+</script> -->
+<script>
+  var provinsiData = [
+    {% for prov in provinsi %}
+      ['{{ prov.0 }}', '{{ prov.1 }}'],
+    {% endfor %}
+  ];
+
+  document.getElementById('id_provinsi').addEventListener('change', function() {
+    var selectedValue = this.value;
+    var secondTextField = document.getElementById('id_kode_provinsi');
+    
+    var selectedTuple = provinsiData.find(tuple => tuple[0] == selectedValue);
+    
+    if (selectedTuple) {
+        secondTextField.value = selectedTuple[1];
+    } else {
+        secondTextField.value = '';
+    }
+  });
+</script>
+
+
+{% endblock script %}
+  
+    
